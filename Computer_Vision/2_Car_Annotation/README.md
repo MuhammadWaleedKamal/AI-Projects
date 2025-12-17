@@ -52,5 +52,5 @@ The YOLO model first detects **cars in an image**, and then the **user manually 
 
 ```bash
 pip install ultralytics opencv-python numpy
-python main.py
+python selecting_cars.py
 ```
