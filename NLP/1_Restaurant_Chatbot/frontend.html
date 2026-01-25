@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Order Chatbot</title>
+  <link rel="icon" href="restaurant.ico">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="bg-green-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">🍔 FoodBot</h1>
+      <ul class="hidden md:flex space-x-6 font-medium">
+        <li><a href="#images" class="hover:underline">Item</a></li>
+        <li><a href="#location" class="hover:underline">Location</a></li>
+        <li><a href="#contact" class="hover:underline">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <section class="bg-white py-16 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+      Order Food Easily with Our Chatbot 🤖
+    </h2>
+    <p class="text-gray-600 max-w-2xl mx-auto">
+      Chat with our smart food ordering bot to place orders, track your food,
+      and get instant responses — powered by AI.
+    </p>
+  </section>
+
+  <!-- ================= IMAGE SECTION ================= -->
+<section id="images" class="py-16 bg-gray-100">
+  <div class="max-w-6xl mx-auto px-4">
+    <h3 class="text-2xl font-bold text-center mb-8">🍕 Food Gallery</h3>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+
+      <!-- Image Card -->
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="biryani image.png"
+          alt="Biryani"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="mango lassi.png"
+          alt="Mango Lassi"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="roll image.png"
+          alt="Roll"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="sandwich image.png"
+          alt="Sandwich"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="samosa image.png"
+          alt="Sandwich"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="chinese image.png"
+          alt="Sandwich"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="burger image.png"
+          alt="Sandwich"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+      <div class="bg-white rounded-lg shadow h-40 w-full flex items-center justify-center overflow-hidden">
+        <img
+          src="pizza image.png"
+          alt="Sandwich"
+          class="max-h-full max-w-full object-contain"
+        />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- ================= LOCATION (TEXT ONLY) ================= -->
+  <section id="location" class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-4">📍 Our Location</h3>
+      <p class="text-gray-600">
+        <!-- You can replace this text -->
+        We are located at XYZ, Karachi, Pakistan.  
+        Delivery available in nearby areas.  
+        Open daily from 10:00 AM to 11:00 PM.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT (TEXT ONLY) ================= -->
+  <section id="contact" class="py-16 bg-gray-100">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-4">📞 Contact Us</h3>
+      <p class="text-gray-600">
+        <!-- You can replace this text -->
+        Phone: +92 303 2466154
+        <br>
+        Email: waleedkamal801@gmail.com 
+        <br>
+        WhatsApp: +92 324 2923319
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-green-600 text-white text-center py-4">
+    © 2026 FoodBot | Built with FastAPI & Dialogflow
+  </footer>
+
+  <!-- ================= FLOATING CHATBOT ================= -->
+
+  <!-- Chat Button -->
+  <button
+    id="chatToggle"
+    class="fixed bottom-6 right-6 bg-green-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-green-700 transition z-50">
+    💬
+  </button>
+
+  <!-- Chat Window -->
+  <div
+    id="chatWindow"
+    class="hidden fixed bottom-24 right-6 w-[350px] h-[500px] bg-white rounded-xl shadow-xl overflow-hidden z-50">
+
+    <div class="bg-green-600 text-white px-4 py-3 flex justify-between items-center">
+      <span class="font-semibold">FoodBot</span>
+      <button id="closeChat" class="text-xl">✖</button>
+    </div>
+
+    <iframe
+      allow="microphone;"
+      class="w-full border-none"
+      style="height: calc(100% - 48px);"
+      src="https://console.dialogflow.com/api-client/demo/embedded/2ecd1757-89b6-4290-9d6a-df81880cfb39">
+    </iframe>
+
+  </div>
+
+  <!-- ================= CHAT SCRIPT ================= -->
+  <script>
+    const chatToggle = document.getElementById("chatToggle");
+    const chatWindow = document.getElementById("chatWindow");
+    const closeChat = document.getElementById("closeChat");
+
+    chatToggle.addEventListener("click", () => {
+      chatWindow.classList.toggle("hidden");
+    });
+
+    closeChat.addEventListener("click", () => {
+      chatWindow.classList.add("hidden");
+    });
+  </script>
+
+</body>
+</html>
