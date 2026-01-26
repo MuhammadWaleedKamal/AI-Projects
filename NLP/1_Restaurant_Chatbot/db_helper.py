@@ -2,8 +2,8 @@ import mysql.connector
 
 cnx = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="waleedkamal801@gmail.com",
+        user="XXXX",  # Write your own user of MySQL.
+        password="XXXXXXXXXXXXXXXXX",  # Write your own root password of MySQL.
         database="pandeyji_eatery"
     )
 
@@ -125,4 +125,5 @@ def insert_order_tracking(order_id: int, status: str):
     return 1
     
     
+
     
