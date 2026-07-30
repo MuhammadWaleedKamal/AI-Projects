@@ -67,6 +67,7 @@ pip install -r requirements.txt
 **Create a .env file in the root directory:**
 
 **Code snippet**
+
 GEMINI_API_KEY=your_google_gemini_api_key
 
 ## Run the Flask application:
