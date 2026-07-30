@@ -34,6 +34,8 @@ An intelligent, full-stack web application designed for dynamic text analysis, s
 ├── api/
 │   └── index.py        # Flask Backend & API Routes
 ├── public/
+|   ├── aboutus.html
+│   ├── contactus.html   
 │   ├── index.html      # UI Layout & Favicon
 │   ├── style.css       # Responsive Stylesheet
 │   └── scripts.js      # Async Event Handling & API Integration
