@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart AI Assistant - Workspace</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="./index.html" class="nav-brand">Smart AI Workspace</a>
+    <ul class="nav-links">
+      <li><a href="./index.html" class="active">AI Chat</a></li>
+      <li><a href="./aboutus.html">About Us</a></li>
+      <li><a href="./contactus.html">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    <header>
+      <h1>AI Text & Insight Assistant</h1>
+      <p>Intelligent Content Processing & Summarization Suite</p>
+    </header>
+
+    <main class="card">
+      <div class="form-group">
+        <label for="taskSelect">Choose Mode</label>
+        <select id="taskSelect">
+          <option value="general">General Q&A / Writing</option>
+          <option value="summarize">Summarize Key Points</option>
+          <option value="explain">Explain Simply (Analogy)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="userInput">Your Input Text or Question</label>
+        <textarea id="userInput" rows="4" placeholder="Type or paste text here..."></textarea>
+      </div>
+
+      <div class="form-group" style="border: 1px dashed #475569; padding: 12px; border-radius: 8px;">
+        <label for="fileInput">Or Upload Document (PDF, Word, TXT)</label>
+        <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" />
+      </div>
+
+      <button id="submitBtn" onclick="generateAIResponse()">Process Input / File</button>
+
+      <div id="loader" class="loader hidden">Processing with AI...</div>
+
+      <div id="resultContainer" class="result-box hidden">
+        <h3>Output:</h3>
+        <p id="resultText"></p>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Smart AI Assistant. Built with Python, Flask & Vanilla Web Technologies.</p>
+  </footer>
+
+  <script src="./scripts.js"></script>
+</body>
+</html>
