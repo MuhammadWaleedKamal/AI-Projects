@@ -37,8 +37,13 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
-nlp = spacy.load("en_core_web_sm")
-
+try:
+    nlp = spacy.load("en_core_web_sm")
+except Exception:
+    import spacy.cli
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
+    
 sentiment_pipeline = pipeline(
     "sentiment-analysis", 
     model="cardiffnlp/twitter-roberta-base-sentiment-latest"
