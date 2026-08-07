@@ -25,7 +25,7 @@ const observer = new IntersectionObserver((entries) => {
       alertBanner.style.display = 'none';
 
       try {
-        const response = await fetch('/api/analyze', {
+        const response = await fetch('https://ai-projects-production-7f7f.up.railway.app/api/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ product_name: product, review: reviewText })
@@ -89,7 +89,7 @@ const observer = new IntersectionObserver((entries) => {
       successBanner.style.display = 'none';
 
       try {
-        const response = await fetch('/api/contact', {
+        const response = await fetch('https://ai-projects-production-7f7f.up.railway.app/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: name, sender_email: email, message: message })
