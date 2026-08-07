@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Commerce Sentiment & Aspect AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --pos: #10b981;
+      --neg: #ef4444;
+      --neu: #f59e0b;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      background: radial-gradient(circle at top left, #1e1b4b, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+    .logo { font-weight: 700; font-size: 1.2rem; color: #818cf8; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Layout Sections */
+    section {
+      padding: 3rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    #analyzer { padding-top: 6rem; }
+
+    /* Tech Stack Infinite Marquee */
+    .marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      background: rgba(15, 23, 42, 0.5);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 0;
+      margin: 1.5rem 0;
+      display: flex;
+      position: relative;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 2rem;
+      white-space: nowrap;
+      will-change: transform;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .tech-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border);
+      padding: 0.4rem 1.2rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .tech-tag span { color: #818cf8; }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Scroll Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Cards & Containers */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .section-desc { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+    /* Form Styles */
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 600; }
+    select, input, textarea { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 12px; padding: 0.8rem 1rem; color: var(--text); font-size: 0.95rem; outline: none; }
+    textarea { height: 100px; resize: vertical; }
+    select:focus, input:focus, textarea:focus { border-color: var(--accent); }
+
+    .btn { width: 100%; padding: 1rem; background: var(--accent); color: white; border: none; border-radius: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+    .btn:hover { background: var(--accent-hover); }
+
+    /* Results */
+    .results { margin-top: 1.5rem; display: none; }
+    .alert-banner { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--neg); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; color: #fca5a5; display: none; }
+    .contact-success { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--pos); border-radius: 12px; padding: 1rem; margin-top: 1rem; color: #6ee7b7; display: none; }
+    
+    .badge { padding: 0.4rem 1rem; border-radius: 9999px; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; }
+    .badge.pos { background: rgba(16, 185, 129, 0.2); color: var(--pos); border: 1px solid var(--pos); }
+    .badge.neg { background: rgba(239, 68, 68, 0.2); color: var(--neg); border: 1px solid var(--neg); }
+    .badge.neu { background: rgba(245, 158, 11, 0.2); color: var(--neu); border: 1px solid var(--neu); }
+    .overall-card { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .aspects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .aspect-card { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: rgba(15, 23, 42, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">AspectAI Engine</div>
+      <ul class="nav-links">
+        <li><a href="#analyzer">Analyzer</a></li>
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Section 1: Analyzer -->
+  <section id="analyzer" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">E-Commerce Sentiment & Aspect AI</h2>
+      <p class="section-desc">Extract product aspects and trigger email alerts for negative feedback automatically.</p>
+
+      <div class="form-group">
+        <label for="productSelect">Select Product</label>
+        <select id="productSelect">
+          <option value="Wireless Noise-Canceling Earbuds">Wireless Noise-Canceling Earbuds</option>
+          <option value="UltraHD Gaming Monitor 27-inch">UltraHD Gaming Monitor 27-inch</option>
+          <option value="Smart Fitness Watch Series 5">Smart Fitness Watch Series 5</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reviewInput">Customer Comment / Review</label>
+        <textarea id="reviewInput" placeholder="Enter customer review..."></textarea>
+      </div>
+
+      <button class="btn" id="analyzeBtn" onclick="analyzeReview()">Submit & Analyze Feedback</button>
+
+      <div class="results" id="results">
+        <div class="alert-banner" id="alertBanner">
+          🚨 <strong>Negative Sentiment Alert:</strong> Report sent to the store admin via email!
+        </div>
+
+        <div class="overall-card">
+          <div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);" id="resProduct">Product Name</div>
+            <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.25rem;" id="overallScore">Confidence: 0.00</div>
+          </div>
+          <span class="badge" id="overallBadge">Positive</span>
+        </div>
+
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Extracted Aspects</h3>
+        <div class="aspects-grid" id="aspectsContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Track -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <div class="tech-tag"><span>🐍</span> Python</div>
+      <div class="tech-tag"><span>⚡</span> FastAPI</div>
+      <div class="tech-tag"><span>🧠</span> SpaCy NLP</div>
+      <div class="tech-tag"><span>🤗</span> Hugging Face Transformers</div>
+      <div class="tech-tag"><span>🔥</span> PyTorch</div>
+      <div class="tech-tag"><span>🌐</span> HTML5</div>
+      <div class="tech-tag"><span>🎨</span> CSS3</div>
+      <div class="tech-tag"><span>⚡</span> JavaScript</div>
+      <div class="tech-tag"><span>🐍</span> Python</div>
+      <div class="tech-tag"><span>⚡</span> FastAPI</div>
+      <div class="tech-tag"><span>🧠</span> SpaCy NLP</div>
+      <div class="tech-tag"><span>🤗</span> Hugging Face Transformers</div>
+      <div class="tech-tag"><span>🔥</span> PyTorch</div>
+      <div class="tech-tag"><span>🌐</span> HTML5</div>
+      <div class="tech-tag"><span>🎨</span> CSS3</div>
+      <div class="tech-tag"><span>⚡</span> JavaScript</div>
+    </div>
+  </div>
+
+  <!-- Section 2: About Me -->
+  <section id="about" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">About This Project</h2>
+      <p class="section-desc">Designed & Developed by Muhammad Waleed Kamal</p>
+      <p style="color: var(--text-muted); line-height: 1.6;">
+        This enterprise-grade NLP application leverages <strong>SpaCy</strong> for grammar-based aspect extraction and <strong>Hugging Face RoBERTa Transformer</strong> models for precise sentiment classification. Built using FastAPI for backend performance and hosted serverless on Vercel.
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 3: Contact Us -->
+  <section id="contact" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-desc">Have questions or feedback? Send us a direct email message.</p>
+      
+      <div class="form-group">
+        <label for="contactName">Your Name</label>
+        <input type="text" id="contactName" placeholder="Enter your full name" />
+      </div>
+
+      <div class="form-group">
+        <label for="contactEmail">Your Email Address</label>
+        <input type="email" id="contactEmail" placeholder="Enter your email" />
+      </div>
+
+      <div class="form-group">
+        <label for="contactMessage">Your Message</label>
+        <textarea id="contactMessage" placeholder="Write your message here..."></textarea>
+      </div>
+
+      <button class="btn" id="contactBtn" onclick="sendContactMessage()">Send Message</button>
+
+      <div class="contact-success" id="contactSuccess">
+        ✅ <strong>Success!</strong> Your message has been sent to the site admin via email.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 AspectAI Engine. Developed for Modern E-Commerce Moderation.</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Analyzer Functionality
+    async function analyzeReview() {
+      const product = document.getElementById('productSelect').value;
+      const reviewText = document.getElementById('reviewInput').value.trim();
+
+      if (!reviewText) return alert("Please enter a customer review!");
+
+      const btn = document.getElementById('analyzeBtn');
+      const results = document.getElementById('results');
+      const alertBanner = document.getElementById('alertBanner');
+
+      btn.disabled = true;
+      btn.textContent = "Analyzing & Checking Alerts...";
+      results.style.display = 'none';
+      alertBanner.style.display = 'none';
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_name: product, review: reviewText })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Analysis failed');
+
+        document.getElementById('resProduct').textContent = data.product;
+        const overallBadge = document.getElementById('overallBadge');
+        overallBadge.textContent = data.overall_sentiment;
+        overallBadge.className = `badge ${data.overall_sentiment.toLowerCase().slice(0, 3)}`;
+        document.getElementById('overallScore').textContent = `Confidence: ${(data.overall_confidence * 100).toFixed(1)}%`;
+
+        if (data.email_alert_sent) {
+          alertBanner.style.display = 'block';
+        }
+
+        const container = document.getElementById('aspectsContainer');
+        container.innerHTML = '';
+        if (data.aspects.length === 0) {
+          container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">No explicit product aspects detected.</p>';
+        } else {
+          data.aspects.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'aspect-card';
+            const sentimentClass = item.sentiment.toLowerCase().slice(0, 3);
+            card.innerHTML = `
+              <div>
+                <div style="font-weight:600">${item.aspect}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${(item.confidence * 100).toFixed(0)}% Match</div>
+              </div>
+              <span class="badge ${sentimentClass}">${item.sentiment}</span>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        results.style.display = 'block';
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Submit & Analyze Feedback";
+      }
+    }
+
+    // Contact Form Handler
+    async function sendContactMessage() {
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+
+      if (!name || !email || !message) return alert("Please fill in Name, Email, and Message!");
+
+      const btn = document.getElementById('contactBtn');
+      const successBanner = document.getElementById('contactSuccess');
+
+      btn.disabled = true;
+      btn.textContent = "Sending Email...";
+      successBanner.style.display = 'none';
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, sender_email: email, message: message })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Failed to send message');
+
+        successBanner.style.display = 'block';
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactMessage').value = '';
+      } catch (err) {
+        alert("Error sending message: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Send Message";
+      }
+    }
+  </script>
+</body>
+</html>
