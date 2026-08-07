@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Commerce Sentiment & Aspect AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">AspectAI Engine</div>
+      <ul class="nav-links">
+        <li><a href="#analyzer">Analyzer</a></li>
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Section 1: Analyzer -->
+  <section id="analyzer" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">E-Commerce Sentiment & Aspect AI</h2>
+      <p class="section-desc">Extract product aspects and trigger email alerts for negative feedback automatically.</p>
+
+      <div class="form-group">
+        <label for="productSelect">Select Product</label>
+        <select id="productSelect">
+          <option value="Wireless Noise-Canceling Earbuds">Wireless Noise-Canceling Earbuds</option>
+          <option value="UltraHD Gaming Monitor 27-inch">UltraHD Gaming Monitor 27-inch</option>
+          <option value="Smart Fitness Watch Series 5">Smart Fitness Watch Series 5</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reviewInput">Customer Comment / Review</label>
+        <textarea id="reviewInput" placeholder="Enter customer review..."></textarea>
+      </div>
+
+      <button class="btn" id="analyzeBtn" onclick="analyzeReview()">Submit & Analyze Feedback</button>
+
+      <div class="results" id="results">
+        <div class="alert-banner" id="alertBanner">
+          🚨 <strong>Negative Sentiment Alert:</strong> Report sent to the store admin via email!
+        </div>
+
+        <div class="overall-card">
+          <div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);" id="resProduct">Product Name</div>
+            <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.25rem;" id="overallScore">Confidence: 0.00</div>
+          </div>
+          <span class="badge" id="overallBadge">Positive</span>
+        </div>
+
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Extracted Aspects</h3>
+        <div class="aspects-grid" id="aspectsContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Track -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <div class="tech-tag"><span>🐍</span> Python</div>
+      <div class="tech-tag"><span>⚡</span> FastAPI</div>
+      <div class="tech-tag"><span>🧠</span> SpaCy NLP</div>
+      <div class="tech-tag"><span>🤗</span> Hugging Face Transformers</div>
+      <div class="tech-tag"><span>🔥</span> PyTorch</div>
+      <div class="tech-tag"><span>🌐</span> HTML5</div>
+      <div class="tech-tag"><span>🎨</span> CSS3</div>
+      <div class="tech-tag"><span>⚡</span> JavaScript</div>
+      <div class="tech-tag"><span>🐍</span> Python</div>
+      <div class="tech-tag"><span>⚡</span> FastAPI</div>
+      <div class="tech-tag"><span>🧠</span> SpaCy NLP</div>
+      <div class="tech-tag"><span>🤗</span> Hugging Face Transformers</div>
+      <div class="tech-tag"><span>🔥</span> PyTorch</div>
+      <div class="tech-tag"><span>🌐</span> HTML5</div>
+      <div class="tech-tag"><span>🎨</span> CSS3</div>
+      <div class="tech-tag"><span>⚡</span> JavaScript</div>
+    </div>
+  </div>
+
+  <!-- Section 2: About Me -->
+  <section id="about" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">About This Project</h2>
+      <p class="section-desc">Designed & Developed by Muhammad Waleed Kamal</p>
+      <p style="color: var(--text-muted); line-height: 1.6;">
+        This enterprise-grade NLP application leverages <strong>SpaCy</strong> for grammar-based aspect extraction and <strong>Hugging Face RoBERTa Transformer</strong> models for precise sentiment classification. Built using FastAPI for backend performance and hosted serverless on Vercel.
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 3: Contact Us -->
+  <section id="contact" class="fade-in">
+    <div class="card">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-desc">Have questions or feedback? Send us a direct email message.</p>
+      
+      <div class="form-group">
+        <label for="contactName">Your Name</label>
+        <input type="text" id="contactName" placeholder="Enter your full name" />
+      </div>
+
+      <div class="form-group">
+        <label for="contactEmail">Your Email Address</label>
+        <input type="email" id="contactEmail" placeholder="Enter your email" />
+      </div>
+
+      <div class="form-group">
+        <label for="contactMessage">Your Message</label>
+        <textarea id="contactMessage" placeholder="Write your message here..."></textarea>
+      </div>
+
+      <button class="btn" id="contactBtn" onclick="sendContactMessage()">Send Message</button>
+
+      <div class="contact-success" id="contactSuccess">
+        ✅ <strong>Success!</strong> Your message has been sent to the site admin via email.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 AspectAI Engine. Developed for Modern E-Commerce Moderation.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
