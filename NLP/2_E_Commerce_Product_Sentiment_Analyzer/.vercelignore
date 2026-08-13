@@ -1,0 +1,7 @@
+api/
+requirements.txt
+Dockerfile
+.dockerignore
+.venv/
+__pycache__/
+*.py
