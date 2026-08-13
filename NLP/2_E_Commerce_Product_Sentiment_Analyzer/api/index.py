@@ -1,19 +1,22 @@
 import os
 import warnings
 import logging
+import resend  # Replaced fastapi_mail with Resend
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import spacy
 from dotenv import load_dotenv
 from transformers import pipeline
-from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 
 load_dotenv()
 
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 warnings.filterwarnings("ignore")
 logging.getLogger("transformers").setLevel(logging.ERROR)
+
+# Resend API Key setup
+resend.api_key = os.getenv("RESEND_API_KEY")
 
 app = FastAPI(title="Aspect Sentiment Analyzer API")
 
@@ -25,31 +28,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Email Configuration
-conf = ConnectionConfig(
-    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
-    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
-    MAIL_FROM=os.getenv("MAIL_USERNAME"),
-    MAIL_PORT=465,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True
-)
-
 try:
     nlp = spacy.load("en_core_web_sm")
 except Exception:
     import spacy.cli
     spacy.cli.download("en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
-    
+
 sentiment_pipeline = pipeline(
     "sentiment-analysis", 
     model="cardiffnlp/twitter-roberta-base-sentiment-latest"
 )
 
-# REMOVED owner_email from payload schema
 class ReviewRequest(BaseModel):
     product_name: str
     review: str
@@ -76,6 +66,21 @@ def extract_aspects(text: str):
                         aspects.append(aspect_phrase)
     return list(dict.fromkeys(aspects))
 
+# Helper function to send email via Resend HTTP API
+def send_email_via_resend(to_email: str, subject: str, html_body: str):
+    try:
+        response = resend.Emails.send({
+            "from": "onboarding@resend.dev",  # Default free domain for testing
+            "to": to_email,
+            "subject": subject,
+            "html": html_body,
+        })
+        print(f"Email sent successfully via Resend: {response}")
+        return True
+    except Exception as e:
+        print(f"Failed to send email via Resend: {e}")
+        return False
+
 @app.post("/api/analyze")
 async def analyze_sentiment(payload: ReviewRequest):
     review_text = payload.review.strip()
@@ -100,10 +105,10 @@ async def analyze_sentiment(payload: ReviewRequest):
         })
 
     email_sent = False
-    # Send alert to store owner (you) automatically if review is negative
+    # Send alert to store owner automatically if review is negative
     if overall_sentiment.lower() == "negative":
-        owner_email = os.getenv("MAIL_USERNAME")
-        if owner_email:
+        owner_email = os.getenv("MAIL_USERNAME")  # Your email address where you want to receive alerts
+        if owner_email and resend.api_key:
             aspect_list_str = ", ".join([a["aspect"] for a in aspect_results]) or "None detected"
             html_content = f"""
             <h3>⚠️ Negative Review Alert!</h3>
@@ -112,18 +117,11 @@ async def analyze_sentiment(payload: ReviewRequest):
             <p><strong>Extracted Aspects:</strong> {aspect_list_str}</p>
             <p><strong>Confidence Score:</strong> {overall_score * 100}%</p>
             """
-            try:
-                message = MessageSchema(
-                    subject=f"🚨 Negative Feedback Alert: {product}",
-                    recipients=[owner_email],
-                    body=html_content,
-                    subtype=MessageType.html
-                )
-                fm = FastMail(conf)
-                await fm.send_message(message)
-                email_sent = True
-            except Exception as e:
-                print(f"Failed to send alert email: {e}")
+            email_sent = send_email_via_resend(
+                to_email=owner_email,
+                subject=f"🚨 Negative Feedback Alert: {product}",
+                html_body=html_content
+            )
 
     return {
         "product": product,
@@ -144,20 +142,20 @@ async def handle_contact_form(payload: ContactRequest):
     <p>{payload.message}</p>
     """
     
-    try:
-        recipient = os.getenv("MAIL_USERNAME")
-        if not recipient:
-            raise Exception("MAIL_USERNAME environment variable not configured.")
+    recipient = os.getenv("MAIL_USERNAME")
+    if not recipient:
+        raise HTTPException(status_code=500, detail="MAIL_USERNAME environment variable not configured.")
 
-        message = MessageSchema(
-            subject=f"💬 New Website Message from {payload.name}",
-            recipients=[recipient],
-            body=html_content,
-            subtype=MessageType.html
-        )
-        fm = FastMail(conf)
-        await fm.send_message(message)
+    if not resend.api_key:
+        raise HTTPException(status_code=500, detail="RESEND_API_KEY environment variable not configured.")
+
+    success = send_email_via_resend(
+        to_email=recipient,
+        subject=f"💬 New Website Message from {payload.name}",
+        html_body=html_content
+    )
+
+    if success:
         return {"status": "success", "message": "Email sent successfully!"}
-    except Exception as e:
-        print(f"Failed to send contact email: {e}")
-        raise HTTPException(status_code=500, detail="Failed to send email message.")
+    else:
+        raise HTTPException(status_code=500, detail="Failed to send email message via Resend.")
