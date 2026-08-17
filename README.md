@@ -92,8 +92,8 @@ Feel free to fork this repo and submit a pull request.
 If you’d like to collaborate or discuss AI ideas:
 
 - 📧 Email: waleedkamal801@gmail.com
-- 🔗 LinkedIn: [www.linkedin.com/in/muhammad-waleed-kamal-3910422b3](https://www.linkedin.com/in/muhammad-waleed-kamal-3910422b3/)
-- 🐙 GitHub: [https://github.com/Waleed8001/](https://github.com/Waleed8001/)
+- 🔗 LinkedIn: [www.linkedin.com/in/muhammad-waleed-kamal-11645b41b](https://www.linkedin.com/in/muhammad-waleed-kamal-11645b41b/)
+- 🐙 GitHub: [https://github.com/MuhammadWaleedKamal/](https://github.com/MuhammadWaleedKamal/)
 
 
 
