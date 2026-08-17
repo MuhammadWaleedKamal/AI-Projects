@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 from sqlalchemy import inspect
-from beckend.clarification_engine import UniversalClarificationEngine
+from backend.clarification_engine import UniversalClarificationEngine
 
 load_dotenv(ROOT_DIR / ".env")
 
