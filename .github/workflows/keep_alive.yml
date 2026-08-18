@@ -1,0 +1,22 @@
+name: Wake Streamlit App
+
+on:
+  schedule:
+    # Runs every 4 hours to comfortably beat the inactivity timeout
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # Allows you to manually trigger it from GitHub Actions UI
+
+jobs:
+  wake_app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install streamlit-wakeup
+        run: pip install streamlit-wakeup
+
+      - name: Ping and Wake Streamlit App
+        run: streamlit-wakeup https://text-to-sql-clarificationengine-dzf55rgbaisgigq3savljt.streamlit.app/
