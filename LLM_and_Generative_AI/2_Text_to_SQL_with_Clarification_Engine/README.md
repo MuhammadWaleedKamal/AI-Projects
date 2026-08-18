@@ -69,9 +69,18 @@ The engine was evaluated on 20 standard ambiguous enterprise queries:
 | 10 | *Loyal customers in Karachi.* | Tenure length vs. Frequency of purchases |
 | ... | *10 additional evaluation cases* | *See benchmark report sheet* |
 
-[SQL Query Report.xlsx](https://github.com/user-attachments/files/31195003/SQL.Query.Report.xlsx)
+[SQL Query Report.xlsx](https://github.com/user-attachments/files/31195818/SQL.Query.Report.xlsx)
 
 ---
+
+## 📊 Performance & Benchmark Summary (20 Test Cases)
+
+| Evaluation Metric | Baseline (Without Clarification) | With Clarification Engine | Improvement |
+| :--- | :---: | :---: | :---: |
+| **Intent Disambiguation Rate** | 0% *(Silent Guess)* | **100%** *(Explicitly Resolved)* | **+100%** |
+| **Business Logic Accuracy** | 25% | **95%** | **+70%** |
+| **Silent Metric Hallucinations** | 75% | **0%** | **-75% (Eliminated)** |
+| **SQL Execution Success (Dialect)** | 60% | **100%** | **+40%** |
 
 ## 🛠️ Tech Stack
 
