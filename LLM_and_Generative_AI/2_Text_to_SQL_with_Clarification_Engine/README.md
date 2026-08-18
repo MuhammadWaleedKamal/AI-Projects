@@ -6,6 +6,31 @@ Unlike naive Text-to-SQL converters that make arbitrary assumptions on underspec
 
 ---
 
+## 🛑 The Problem: The "Silent Hallucination" in Text-to-SQL
+
+Standard LLM-powered Text-to-SQL pipelines operate on a dangerous assumption: **they assume every natural language request has a single, deterministic answer.**
+
+In real-world business environments, most user queries are inherently ambiguous:
+* Asking **"Show top customers"** could mean highest total spend, largest order volume, or highest loyalty tier.
+* Asking **"Find active users"** could mean logged in recently, completed a transaction, or active account status.
+* Asking **"Identify failing products"** could mean lowest sales, highest return rates, or poorest review ratings.
+
+### Why Baseline Text-to-SQL Fails
+1. **Silent Metric Assumption:** Baseline models guess a single metric without informing the user, returning plausible-looking SQL queries that answer the wrong business question.
+2. **Costly Decision Making:** Non-technical business stakeholders unknowingly make decisions based on misaligned data.
+3. **Loss of Trust in AI:** When stakeholders discover the discrepancy, confidence in self-service analytics drops completely.
+
+---
+
+## 💡 The Solution: Interactive Disambiguation & Guardrailed Execution
+
+This engine replaces guesswork with an **Ambiguity-Aware Pipeline**:
+
+* 🔍 **Proactive Ambiguity Interception:** The model inspects the database schema and detects when a query lacks clear business metrics before generating SQL.
+* 🎯 **Structured User Disambiguation:** Instead of hallucinating criteria, it halts direct execution and returns 2–4 concrete, clickable interpretation options.
+* 🛡️ **Dialect-Aware Safe Generation:** Once the user selects their exact intent, the engine generates strictly validated, read-only SQL for the target database dialect (SQLite / MySQL).
+* ⚖️ **Side-by-Side Verification:** Includes a benchmark mode allowing users to compare the engine's precision directly against standard naive LLM generation.
+
 ## 🏛️ System Architecture
 
 <img width="200" height="320" alt="Architecture_Diagram" src="https://github.com/user-attachments/assets/3591bd1b-672d-4396-9a31-cae9a15523ad" />
