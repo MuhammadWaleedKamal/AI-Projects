@@ -43,7 +43,7 @@ This engine replaces guesswork with an **Ambiguity-Aware Pipeline**:
 - **Dual-Pipeline Benchmarking:** Side-by-side comparison between **With Clarification Engine** vs. **Baseline (Direct Assumption)**.
 - **Universal Multi-Database Engine:**
   - **SQLite:** Built-in default e-commerce database & custom `.db` file upload.
-  - **Live Cloud MySQL:** Full SSL/TLS authentication support for cloud databases (Aiven, TiDB Cloud, AWS RDS).
+  - **Live Cloud MySQL:** Full SSL/TLS authentication support for cloud databases (Aiven, TiDB Cloud).
 - **Production Guardrails:**
   - **Schema Token Optimization:** Prunes wide/massive schemas to prevent LLM context overflows.
   - **OOM Memory Protection:** Safe batch fetching (`fetchmany`) to prevent browser crashes on large result sets.
@@ -75,7 +75,7 @@ The engine was evaluated on 20 standard ambiguous enterprise queries:
 
 ## 🛠️ Tech Stack
 
-- **LLM / GenAI:** Google Gemini API (`gemini-2.5-flash`)
+- **LLM / GenAI:** Google Gemini API (`gemini-3.5-flash-lite`)
 - **Structured Validation:** Pydantic v2
 - **Database Layer:** SQLAlchemy 2.0, PyMySQL, Cryptography
 - **UI & Deployment:** Streamlit Community Cloud + UptimeRobot Keep-Alive
